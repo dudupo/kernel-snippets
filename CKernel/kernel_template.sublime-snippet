@@ -1,0 +1,30 @@
+<snippet>
+	<content><![CDATA[
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/init.h>
+#include <linux/stat.h>
+
+MODULE_LICENSE("GPL");
+
+static int __init ${1:name}_init(void)
+{
+	
+	return 0;
+}
+
+static void __exit ${2:name}_exit(void)
+{
+	printk(KERN_INFO "goodbye");
+}
+
+module_init(${1:name}_init);
+module_exit(${2:name}_exit);
+
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>static int __init</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c</scope>
+</snippet>
+

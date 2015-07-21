@@ -1,0 +1,17 @@
+#!/bin/sh
+if  [ $# -eq 0 ]
+then 
+echo "$0 : "
+echo "  no arguments have been passed"
+exit 1 
+fi
+
+if [ "$1" == "push" ]
+then 
+git add --all
+echo -e "\e[38;5;27m>$0 :\e[39m enter message"
+read message
+git commit -m "$message" --author="dudu-ponarovsky \<dudupo51@gmail.com\>"
+sudo git push https://github.com/dudupo/kernel-snippets.git
+exit 1
+fi 

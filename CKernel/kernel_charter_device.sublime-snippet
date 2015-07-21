@@ -1,0 +1,95 @@
+<snippet>
+	<content><![CDATA[
+#include <linux/kernel.h>
+#include <linux/module.h>
+#include <linux/fs.h>
+#include <asm/uaccess.h>  
+#include <asm/errno.h>
+#include <asm/io.h>
+ 
+int init_${0:module}(void);
+void cleanup_${0:module}(void);
+static int ${1:chardev}_open(struct inode *, struct file *);
+static int ${1:chardev}_release(struct inode *, struct file *);
+static ssize_t ${1:chardev}_read(struct file *, char *, size_t, loff_t *);
+static ssize_t ${1:chardev}_write(struct file *, const char *, size_t, loff_t *);
+
+#define SUCCESS 0
+#define DEVICE_NAME "${1:chardev}" 
+         
+
+static int Major;            /* Major number assigned to our device driver */
+static int Device_Open = 0;  /* Is device open?  */
+
+
+static struct file_operations fops = {
+  .read = ${1:chardev}_read,
+  .write = ${1:chardev}_write,
+  .open = ${1:chardev}_open,
+  .release = ${1:chardev}_release,
+};
+
+/* Functions */
+
+int init_${0:module}(void)
+{
+   Major = register_chrdev(0, DEVICE_NAME, &fops);
+
+   if (Major < 0) {
+     printk ("Registering the character device failed with %d\n", Major);
+     return Major;
+   }
+
+   printk("<1>I was assigned major number %d.  To talk to\n", Major);
+   printk("<1>the driver, create a dev file with\n");
+   printk("mknod /dev/hello c %d 0\n", Major);
+
+   return SUCCESS;
+}
+
+
+void cleanup_${0:module}(void)
+{
+   unregister_chrdev(Major, DEVICE_NAME);
+}
+
+
+static int ${1:chardev}_open(struct inode *inode, struct file *file)
+{
+	if (Device_Open) return -EBUSY;
+	Device_Open++;
+	return SUCCESS;
+}
+
+static int ${1:chardev}_release(struct inode *inode, struct file *file)
+{
+   Device_Open --;     /* We're now ready for our next caller */
+   return SUCCESS;
+}
+
+static ssize_t ${1:chardev}_read(struct file *filp,
+ char *buffer,    /* The buffer to fill with data */
+ size_t length,   /* The length of the buffer     */
+ loff_t *offset)  /* Our offset in the file       */
+{
+
+	int bytes_read = 0;
+	return bytes_read;
+}
+
+static ssize_t ${1:chardev}_write(struct file *filp,
+ char *buffer,    /* The buffer to fill with data */
+ size_t length,   /* The length of the buffer     */
+ loff_t *offset)  /* Our offset in the file       */
+{
+
+	int bytes_read = 0;
+	return bytes_read;
+}
+MODULE_LICENSE("GPL");
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>char_device</tabTrigger> 
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c</scope> 
+</snippet>

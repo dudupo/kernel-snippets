@@ -1,0 +1,12 @@
+<snippet>
+	<content><![CDATA[
+static ${3:int} ${1:name} = ${2:1};
+
+module_param(${1:name} , ${3:int} , ${4:0000});
+MODULE_PARM_DESC(${1:name}, "${5:....}");
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>module_param</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c</scope>
+</snippet>
